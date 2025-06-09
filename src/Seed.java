@@ -27,8 +27,6 @@ public enum Seed {   // to save as "Seed.java"
             img = icon.getImage();
         }
     }
-
-    // Public getters
     public String getDisplayName() {
         return displayName;
     }
