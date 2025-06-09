@@ -1,5 +1,9 @@
-import java.awt.*;
 
+package TEST;
+import java.awt.*;
+/**
+ * The Cell class models each individual cell of the game board.
+ */
 public class Cell {
     // Define named constants for drawing
     public static final int SIZE = 120; // cell width/height (square)
