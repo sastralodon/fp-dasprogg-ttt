@@ -1,11 +1,10 @@
-package TicTacToe5;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 /**
  * Tic-Tac-Toe: Two-player Graphic version with better OO design.
  * The Board and Cell classes are separated in their own classes.
- */
+ *///
 public class GameMain extends JPanel {
     private static final long serialVersionUID = 1L; // to prevent serializable warning
 
@@ -41,14 +40,13 @@ public class GameMain extends JPanel {
                             && board.cells[row][col].content == Seed.NO_SEED) {
                         // Update cells[][] and return the new game state after the move
                         currentState = board.stepGame(currentPlayer, row, col);
+                        if (currentState == State.PLAYING) {
+                            SoundEffect.EAT_FOOD.play();
+                        } else {
+                            SoundEffect.DIE.play();
+                        }
                         // Switch player
                         currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
-                    }
-                    // Play appropriate sound clip
-                    if (currentState == State.PLAYING) {
-                        SoundEffect.EAT_FOOD.play();
-                    } else {
-                        SoundEffect.DIE.play();
                     }
                 } else {        // game over
                     newGame();  // restart the game

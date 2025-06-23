@@ -1,5 +1,3 @@
-package TicTacToe5;
-
 import java.awt.*;
 /**
  * The Board class models the ROWS-by-COLS game board.
@@ -105,5 +103,6 @@ public class Board {
                 cells[row][col].paint(g);  // ask the cell to paint itself
             }
         }
+        //i
     }
 }
