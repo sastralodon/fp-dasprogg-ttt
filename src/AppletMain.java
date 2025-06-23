@@ -19,5 +19,6 @@ public class AppletMain extends JApplet {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //i
     }
 }

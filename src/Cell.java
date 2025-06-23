@@ -36,4 +36,5 @@ public class Cell {
             g.drawImage(content.getImage(), x1, y1, SEED_SIZE, SEED_SIZE, null);
         }
     }
+    //o
 }

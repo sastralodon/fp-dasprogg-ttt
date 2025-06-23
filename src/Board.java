@@ -103,5 +103,6 @@ public class Board {
                 cells[row][col].paint(g);  // ask the cell to paint itself
             }
         }
+        //i
     }
 }
