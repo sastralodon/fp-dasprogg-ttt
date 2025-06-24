@@ -1,5 +1,6 @@
 package TicTacToe5;
 
+import TicTacToe5.BoardWithBackground;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -20,7 +21,7 @@ public class GameMain extends JPanel {
     public static final Font FONT_STATUS = new Font("OCR A Extended", Font.PLAIN, 14);
 
     // Define game objects
-    private Board board;         // the game board
+    private BoardWithBackground board;   // the game board
     private State currentState;  // the current state of the game
     private Seed currentPlayer;  // the current player
     private JLabel statusBar;    // for displaying status message
@@ -83,7 +84,7 @@ public class GameMain extends JPanel {
 
     /** Initialize the game (run once) */
     public void initGame() {
-        board = new Board();  // allocate the game-board
+        board = new BoardWithBackground();
     }
 
     /** Reset the game-board contents and the current-state, ready for new game */
