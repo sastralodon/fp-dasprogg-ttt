@@ -23,8 +23,12 @@ public class GameMain extends JPanel {
     private JLabel statusBar;
     private int crossWins = 0;
     private int noughtWins = 0;
+    private boolean hasShownWinnerPopup = false;
 
-    /** Constructor */
+
+    /**
+     * Constructor
+     */
     public GameMain() {
         super.addMouseListener(new MouseAdapter() {
             @Override
@@ -108,6 +112,7 @@ public class GameMain extends JPanel {
         }
         currentPlayer = Seed.CROSS;
         currentState = State.PLAYING;
+        hasShownWinnerPopup = false;
     }
 
     @Override
@@ -131,14 +136,20 @@ public class GameMain extends JPanel {
         } else if (currentState == State.CROSS_WON) {
             statusBar.setForeground(Color.RED);
             statusBar.setText("'X' Won! Click to play again.  X Wins: " + crossWins + " | O Wins: " + noughtWins);
-            showWinnerPopup("win_cross.gif");
+            if (!hasShownWinnerPopup) {
+                showWinnerPopup("win_cross.gif");
+                hasShownWinnerPopup = true;
+            }
         } else if (currentState == State.NOUGHT_WON) {
             statusBar.setForeground(Color.RED);
             statusBar.setText("'O' Won! Click to play again.  X Wins: " + crossWins + " | O Wins: " + noughtWins);
-            showWinnerPopup("win_nought.gif");
+            if (!hasShownWinnerPopup) {
+                showWinnerPopup("win_nought.gif");
+                hasShownWinnerPopup = true;
+            }
         }
-
     }
+
     private void showWinnerPopup(String gifFileName) {
         try {
             String path = "/themes/" + ThemeManager.selectedTheme + "/" + gifFileName;
