@@ -77,7 +77,7 @@ public class BoardWithBackground extends Board {
     public State stepGame(Seed player, int selectedRow, int selectedCol) {
         cells[selectedRow][selectedCol].content = player;
 
-        // Cek kemenangan
+        // Cek yang menang
         State result;
         if (cells[selectedRow][0].content == player
                 && cells[selectedRow][1].content == player
