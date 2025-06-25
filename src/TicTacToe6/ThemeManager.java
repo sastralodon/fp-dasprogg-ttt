@@ -1,4 +1,4 @@
-package TicTacToe5;
+package TicTacToe6;
 
 import javax.imageio.ImageIO;
 import java.awt.Image;
@@ -29,6 +29,7 @@ public class ThemeManager {
             return null;
         }
     }
+
     public static Clip loadBGM(String filename) {
         String path = "/themes/" + selectedTheme + "/" + filename;
         try (InputStream is = ThemeManager.class.getResourceAsStream(path)) {
@@ -45,7 +46,4 @@ public class ThemeManager {
             return null;
         }
     }
-
-
-
 }
