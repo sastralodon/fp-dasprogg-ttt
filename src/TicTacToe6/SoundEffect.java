@@ -1,4 +1,5 @@
-package TicTacToe5;
+package TicTacToe6;
+
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,7 +30,7 @@ public enum SoundEffect {
         MUTE, LOW, MEDIUM, HIGH
     }
 
-    public static Volume volume = Volume.LOW;
+    public static TicTacToe6.SoundEffect.Volume volume = TicTacToe6.SoundEffect.Volume.LOW;
 
     /** Each sound effect has its own clip, loaded with its own sound file. */
     private Clip clip;
@@ -56,7 +57,7 @@ public enum SoundEffect {
 
     /** Play or Re-play the sound effect from the beginning, by rewinding. */
     public void play() {
-        if (volume != Volume.MUTE) {
+        if (volume != TicTacToe6.SoundEffect.Volume.MUTE) {
             if (clip.isRunning())
                 clip.stop();   // Stop the player if it is still running
             clip.setFramePosition(0); // rewind to the beginning

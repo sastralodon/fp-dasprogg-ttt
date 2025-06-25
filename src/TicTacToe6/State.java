@@ -1,5 +1,4 @@
-package TicTacToe5;
-
+package TicTacToe6;
 
 /**
  *  The enum State contains the various game states of the TTT game

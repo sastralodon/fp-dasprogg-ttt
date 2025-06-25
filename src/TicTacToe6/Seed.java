@@ -1,4 +1,4 @@
-package TicTacToe5;
+package TicTacToe6;
 
 
 import java.awt.Image;
