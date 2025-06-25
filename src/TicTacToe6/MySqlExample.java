@@ -1,21 +1,20 @@
-package TicTacToe4;
+package TicTacToe6;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Locale;
 
 public class MySqlExample {
     public static void main(String[] args) throws ClassNotFoundException {
         String host, port, databaseName, userName, password;
         host = port = databaseName = userName = password = null;
-                host = "mysql-1d2252ab-maryunani52-0a0e.d.aivencloud.com";
-                userName = "avnadmin";
-                password = "AVNS_7r_uUr9IcdVJJaOIlJQ";
-                databaseName = "tictactoedb";
-                port = "24911";
+        host = "mysql-1d2252ab-maryunani52-0a0e.d.aivencloud.com";
+        userName = "avnadmin";
+        password = "AVNS_7r_uUr9IcdVJJaOIlJQ";
+        databaseName = "tictactoedb";
+        port = "24911";
 
         // JDBC allows to have nullable username and password
         if (host == null || port == null || databaseName == null) {
