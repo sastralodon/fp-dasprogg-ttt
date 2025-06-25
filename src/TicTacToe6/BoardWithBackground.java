@@ -12,17 +12,25 @@ public class BoardWithBackground extends Board {
     private Image notImage;
     public int offsetX;
     public int offsetY;
+
+    private Image gridBgImage;
+    private Image mainBgImage;
+
     public BoardWithBackground() {
         super();
         loadImages();
     }
 
-    private Image gridBgImage;    // latar belakang grid (tengah)
-    private Image mainBgImage;    // latar belakang utama (fullscreen)
+    public void updateOffset(int canvasWidth, int canvasHeight) {
+        int totalWidth = Cell.SIZE * COLS;
+        int totalHeight = Cell.SIZE * ROWS;
+        offsetX = (canvasWidth - totalWidth) / 2;
+        offsetY = (canvasHeight - totalHeight) / 2;
+    }
 
     private void loadImages() {
         gridBgImage = ThemeManager.loadImage("bg.png");
-        mainBgImage = ThemeManager.loadImage("mainBg.jpg");   // background seluruh layar
+        mainBgImage = ThemeManager.loadImage("mainBg.jpg");
         crossImage = ThemeManager.loadImage("cross.gif");
         notImage = ThemeManager.loadImage("not.gif");
     }

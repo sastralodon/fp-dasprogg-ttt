@@ -31,6 +31,12 @@ public class GameMain extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 int mouseX = e.getX();
                 int mouseY = e.getY();
+                if (board instanceof BoardWithBackground bgBoard) {
+                    int canvasWidth = getWidth();
+                    int canvasHeight = getHeight() - statusBar.getHeight();
+                    bgBoard.updateOffset(canvasWidth, canvasHeight);
+                }
+
                 int row = (mouseY - ((BoardWithBackground) board).offsetY) / Cell.SIZE;
                 int col = (mouseX - ((BoardWithBackground) board).offsetX) / Cell.SIZE;
 
