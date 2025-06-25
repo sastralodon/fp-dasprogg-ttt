@@ -10,49 +10,56 @@ public class BoardWithBackground extends Board {
     private Image bgImage;
     private Image crossImage;
     private Image notImage;
-
+    public int offsetX;
+    public int offsetY;
     public BoardWithBackground() {
         super();
         loadImages();
     }
 
+    private Image gridBgImage;    // latar belakang grid (tengah)
+    private Image mainBgImage;    // latar belakang utama (fullscreen)
+
     private void loadImages() {
-        try {
-            bgImage = ImageIO.read(getClass().getResource("/images2/bg.jpg"));
-            crossImage = new ImageIcon(getClass().getResource("/images/cross.gif")).getImage();
-            notImage = new ImageIcon(getClass().getResource("/images/not.gif")).getImage();
-        } catch (IOException | IllegalArgumentException e) {
-            System.out.println("Gagal memuat gambar: " + e.getMessage());
-        }
+        gridBgImage = ThemeManager.loadImage("bg.png");
+        mainBgImage = ThemeManager.loadImage("mainBg.jpg");   // background seluruh layar
+        crossImage = ThemeManager.loadImage("cross.gif");
+        notImage = ThemeManager.loadImage("not.gif");
     }
 
-    @Override
-    public void paint(Graphics g) {
-        if (bgImage != null) {
-            g.drawImage(bgImage, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT, null);
+
+
+    public void paintWithOffset(Graphics g, int canvasWidth, int canvasHeight) {
+        int totalWidth = Cell.SIZE * COLS;
+        int totalHeight = Cell.SIZE * ROWS;
+        offsetX = (canvasWidth - totalWidth) / 2;
+        offsetY = (canvasHeight - totalHeight) / 2;
+
+        if (mainBgImage != null) {
+            g.drawImage(mainBgImage, 0, 0, canvasWidth, canvasHeight, null);
         } else {
-            g.setColor(Color.WHITE);
-            g.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, canvasWidth, canvasHeight);
         }
 
-        // Gambar garis grid
-        g.setColor(COLOR_GRID);
+        if (gridBgImage != null) {
+            g.drawImage(gridBgImage, offsetX, offsetY, totalWidth, totalHeight, null);
+        }
+
+        g.setColor(new Color(255, 255, 255, 120));
         for (int row = 1; row < ROWS; ++row) {
-            g.fillRoundRect(0, Cell.SIZE * row - GRID_WIDTH_HALF,
-                    CANVAS_WIDTH - 1, GRID_WIDTH,
-                    GRID_WIDTH, GRID_WIDTH);
+            g.fillRoundRect(offsetX, offsetY + Cell.SIZE * row - GRID_WIDTH_HALF,
+                    totalWidth - 1, GRID_WIDTH, GRID_WIDTH, GRID_WIDTH);
         }
         for (int col = 1; col < COLS; ++col) {
-            g.fillRoundRect(Cell.SIZE * col - GRID_WIDTH_HALF, 0 + Y_OFFSET,
-                    GRID_WIDTH, CANVAS_HEIGHT - 1,
-                    GRID_WIDTH, GRID_WIDTH);
+            g.fillRoundRect(offsetX + Cell.SIZE * col - GRID_WIDTH_HALF, offsetY,
+                    GRID_WIDTH, totalHeight - 1, GRID_WIDTH, GRID_WIDTH);
         }
 
-        // Gambar isi sel (pakai gambar)
         for (int row = 0; row < ROWS; ++row) {
             for (int col = 0; col < COLS; ++col) {
-                int x = col * Cell.SIZE + Cell.PADDING;
-                int y = row * Cell.SIZE + Cell.PADDING;
+                int x = offsetX + col * Cell.SIZE + Cell.PADDING;
+                int y = offsetY + row * Cell.SIZE + Cell.PADDING;
                 int size = Cell.SIZE - 2 * Cell.PADDING;
 
                 if (cells[row][col].content == Seed.CROSS) {
@@ -63,6 +70,8 @@ public class BoardWithBackground extends Board {
             }
         }
     }
+
+
 
     @Override
     public State stepGame(Seed player, int selectedRow, int selectedCol) {

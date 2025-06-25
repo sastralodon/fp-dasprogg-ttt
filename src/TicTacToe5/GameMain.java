@@ -35,9 +35,10 @@ public class GameMain extends JPanel {
             public void mouseClicked(MouseEvent e) {  // mouse-clicked handler
                 int mouseX = e.getX();
                 int mouseY = e.getY();
-                // Get the row and column clicked
-                int row = mouseY / Cell.SIZE;
-                int col = mouseX / Cell.SIZE;
+                int row = (mouseY - board.offsetY) / Cell.SIZE;
+                int col = (mouseX - board.offsetX) / Cell.SIZE;
+
+
 
                 if (currentState == State.PLAYING) {
                     if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS
@@ -53,7 +54,7 @@ public class GameMain extends JPanel {
                         SoundEffect.EAT_FOOD.play();
                     } else{
                         SoundEffect.EXPLODE.play();
-     }
+                    }
                 } else {        // game over
                     newGame();  // restart the game
                 }
@@ -84,8 +85,17 @@ public class GameMain extends JPanel {
 
     /** Initialize the game (run once) */
     public void initGame() {
-        board = new BoardWithBackground();
+        String[] options = {"Tema 1", "Tema 2", "Tema 3"};
+        int choice = JOptionPane.showOptionDialog(null, "Pilih Tema:", "Tema",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+        if (choice == 1) ThemeManager.selectedTheme = "theme2";
+        else if (choice == 2) ThemeManager.selectedTheme = "theme3";
+        else ThemeManager.selectedTheme = "theme1";
+
+        board = new BoardWithBackground();  // buat board setelah tema dipilih
     }
+
 
     /** Reset the game-board contents and the current-state, ready for new game */
     public void newGame() {
@@ -100,13 +110,15 @@ public class GameMain extends JPanel {
 
     /** Custom painting codes on this JPanel */
     @Override
-    public void paintComponent(Graphics g) {  // Callback via repaint()
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        setBackground(COLOR_BG); // set its background color
 
-        board.paint(g);  // ask the game board to paint itself
+        int canvasWidth = getWidth();
+        int canvasHeight = getHeight() - statusBar.getHeight(); // biar status nggak ganggu tengah
 
-        // Print status-bar message
+        board.paintWithOffset(g, canvasWidth, canvasHeight);  // ini yang bikin grid di tengah
+
+        // Status bar text
         if (currentState == State.PLAYING) {
             statusBar.setForeground(Color.BLACK);
             statusBar.setText((currentPlayer == Seed.CROSS) ? "X's Turn" : "O's Turn");
@@ -122,18 +134,25 @@ public class GameMain extends JPanel {
         }
     }
 
-    /** The entry "main" method */
     public static void main(String[] args) {
-        // Run GUI construction codes in Event-Dispatching thread for thread safety
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JFrame frame = new JFrame(TITLE);
-                // Set the content-pane of the JFrame to an instance of main JPanel
-                frame.setContentPane(new GameMain());
+                GameMain gamePanel = new GameMain(); // 🔽 panel utama game
+
+                frame.setContentPane(gamePanel); // 🔁 masukkan panel ke frame
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setLocationRelativeTo(null); // center the application window
-                frame.setVisible(true);            // show it
+
+
+                frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // maksimal layar
+                frame.setUndecorated(true); // hilangkan bar jendela (opsional)
+
+                frame.setVisible(true);
+
+
+                frame.getRootPane().registerKeyboardAction(e -> System.exit(0),
+                        KeyStroke.getKeyStroke("ESCAPE"),
+                        JComponent.WHEN_IN_FOCUSED_WINDOW);
             }
         });
     }
