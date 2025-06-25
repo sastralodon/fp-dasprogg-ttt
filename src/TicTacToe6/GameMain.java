@@ -117,11 +117,30 @@ public class GameMain extends JPanel {
         } else if (currentState == State.CROSS_WON) {
             statusBar.setForeground(Color.RED);
             statusBar.setText("'X' Won! Click to play again.");
+            showWinnerPopup("win_cross.gif");
         } else if (currentState == State.NOUGHT_WON) {
             statusBar.setForeground(Color.RED);
             statusBar.setText("'O' Won! Click to play again.");
+            showWinnerPopup("win_nought.gif");
+        }
+
+    }
+    private void showWinnerPopup(String gifFileName) {
+        try {
+            String path = "/themes/" + ThemeManager.selectedTheme + "/" + gifFileName;
+            java.net.URL gifUrl = ThemeManager.class.getResource(path);
+            if (gifUrl == null) {
+                System.err.println("❌ GIF tidak ditemukan: " + path);
+                return;
+            }
+            ImageIcon gif = new ImageIcon(gifUrl);
+            JLabel label = new JLabel(gif);
+            JOptionPane.showMessageDialog(this, label, "Winner!", JOptionPane.PLAIN_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
 
     /** Entry point */
     public static void main(String[] args) {
