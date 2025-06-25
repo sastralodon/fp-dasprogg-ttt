@@ -4,6 +4,8 @@ package TicTacToe6;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.sound.sampled.Clip;
+
 
 public class GameMain extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -68,7 +70,20 @@ public class GameMain extends JPanel {
     }
 
     public void initGame() {
-        board = new Board();
+        String[] options = {"Nailong", "Love and Deepspace", "Genshin Impact"};
+        int choice = JOptionPane.showOptionDialog(null, "Pilih Tema:", "Tema",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+        if (choice == 1) ThemeManager.selectedTheme = "theme2";
+        else if (choice == 2) ThemeManager.selectedTheme = "theme3";
+        else ThemeManager.selectedTheme = "theme1";
+        board = new BoardWithBackground();
+        Clip bgmClip = ThemeManager.loadBGM("bgm.wav");
+        if (bgmClip != null) {
+            bgmClip.loop(Clip.LOOP_CONTINUOUSLY);
+            bgmClip.start();
+        }
+
     }
 
     public void newGame() {
@@ -85,7 +100,13 @@ public class GameMain extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         setBackground(COLOR_BG);
-        board.paint(g);
+        if (board instanceof BoardWithBackground bgBoard) {
+            int canvasWidth = getWidth();
+            int canvasHeight = getHeight() - statusBar.getHeight();
+            bgBoard.paintWithOffset(g, canvasWidth, canvasHeight);
+        } else {
+            board.paint(g); // fallback kalau bukan BoardWithBackground
+        }
 
         if (currentState == State.PLAYING) {
             statusBar.setForeground(Color.BLACK);
