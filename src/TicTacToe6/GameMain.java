@@ -31,8 +31,9 @@ public class GameMain extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 int mouseX = e.getX();
                 int mouseY = e.getY();
-                int row = mouseY / Cell.SIZE;
-                int col = mouseX / Cell.SIZE;
+                int row = (mouseY - ((BoardWithBackground) board).offsetY) / Cell.SIZE;
+                int col = (mouseX - ((BoardWithBackground) board).offsetX) / Cell.SIZE;
+
 
                 if (currentState == State.PLAYING) {
                     if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS

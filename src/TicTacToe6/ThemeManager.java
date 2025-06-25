@@ -29,7 +29,6 @@ public class ThemeManager {
             return null;
         }
     }
-
     public static Clip loadBGM(String filename) {
         String path = "/themes/" + selectedTheme + "/" + filename;
         try (InputStream is = ThemeManager.class.getResourceAsStream(path)) {
@@ -46,4 +45,7 @@ public class ThemeManager {
             return null;
         }
     }
+
+
+
 }
