@@ -23,7 +23,6 @@ public class GameMain extends JPanel {
     private JLabel statusBar;
     private int crossWins = 0;
     private int noughtWins = 0;
-    private boolean hasShownWinnerPopup = false;
 
 
     /**
@@ -31,44 +30,44 @@ public class GameMain extends JPanel {
      */
     public GameMain() {
         super.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int mouseX = e.getX();
-                int mouseY = e.getY();
-                if (board instanceof BoardWithBackground bgBoard) {
-                    int canvasWidth = getWidth();
-                    int canvasHeight = getHeight() - statusBar.getHeight();
-                    bgBoard.updateOffset(canvasWidth, canvasHeight);
-                }
+                                   @Override
+                                   public void mouseClicked(MouseEvent e) {
+                                       int mouseX = e.getX();
+                                       int mouseY = e.getY();
+                                       if (board instanceof BoardWithBackground bgBoard) {
+                                           int canvasWidth = getWidth();
+                                           int canvasHeight = getHeight() - statusBar.getHeight();
+                                           bgBoard.updateOffset(canvasWidth, canvasHeight);
+                                       }
 
-                int row = (mouseY - ((BoardWithBackground) board).offsetY) / Cell.SIZE;
-                int col = (mouseX - ((BoardWithBackground) board).offsetX) / Cell.SIZE;
+                                       int row = (mouseY - ((BoardWithBackground) board).offsetY) / Cell.SIZE;
+                                       int col = (mouseX - ((BoardWithBackground) board).offsetX) / Cell.SIZE;
 
+                                       if (currentState == State.PLAYING) {
+                                           if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS
+                                                   && board.cells[row][col].content == Seed.NO_SEED) {
+                                               currentState = board.stepGame(currentPlayer, row, col);
+                                               if (currentState == State.CROSS_WON) {
+                                                   crossWins++;
+                                                   showWinnerPopup("win_cross.gif");
+                                               } else if (currentState == State.NOUGHT_WON) {
+                                                   noughtWins++;
+                                                   showWinnerPopup("win_nought.gif");
+                                               } else if (currentState == State.DRAW) {
+                                                   SoundEffect.EAT_FOOD.play();
+                                               } else {
+                                                   SoundEffect.DIE.play();
+                                               }
+                                               currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
+                                           }
+                                       } else {
+                                           newGame();
+                                       }
 
-                if (currentState == State.PLAYING) {
-                    if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS
-                            && board.cells[row][col].content == Seed.NO_SEED) {
-                        currentState = board.stepGame(currentPlayer, row, col);
-                        if (currentState == State.CROSS_WON) {
-                            crossWins++;
-                        } else if (currentState == State.NOUGHT_WON) {
-                            noughtWins++;
-                        }
-                        currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
-                    }
-                    if (currentState == State.PLAYING) {
-                        SoundEffect.DIE.play();
-                    } else if (currentState == State.DRAW) {
-                        SoundEffect.EAT_FOOD.play();
-                    } else {
-                        SoundEffect.EXPLODE.play();
-                    }
-                } else {
-                    newGame();
-                }
-                repaint();
-            }
-        });
+                                       repaint();
+                                   }
+                               });
+
 
         statusBar = new JLabel();
         statusBar.setFont(FONT_STATUS);
@@ -112,7 +111,6 @@ public class GameMain extends JPanel {
         }
         currentPlayer = Seed.CROSS;
         currentState = State.PLAYING;
-        hasShownWinnerPopup = false;
     }
 
     @Override
@@ -127,27 +125,20 @@ public class GameMain extends JPanel {
             board.paint(g); // fallback kalau bukan BoardWithBackground
         }
 
-        if (currentState == State.PLAYING) {
-            statusBar.setForeground(Color.BLACK);
-            statusBar.setText((currentPlayer == Seed.CROSS) ? "X's Turn" : "O's Turn");
-        } else if (currentState == State.DRAW) {
-            statusBar.setForeground(Color.RED);
-            statusBar.setText("It's a Draw! Click to play again.");
-        } else if (currentState == State.CROSS_WON) {
-            statusBar.setForeground(Color.RED);
-            statusBar.setText("'X' Won! Click to play again.  X Wins: " + crossWins + " | O Wins: " + noughtWins);
-            if (!hasShownWinnerPopup) {
-                showWinnerPopup("win_cross.gif");
-                hasShownWinnerPopup = true;
+            if (currentState == State.PLAYING) {
+                statusBar.setForeground(Color.BLACK);
+                statusBar.setText((currentPlayer == Seed.CROSS) ? "X's Turn" : "O's Turn");
+            } else if (currentState == State.DRAW) {
+                statusBar.setForeground(Color.RED);
+                statusBar.setText("It's a Draw! Click to play again.");
+            } else if (currentState == State.CROSS_WON) {
+                statusBar.setForeground(Color.RED);
+                statusBar.setText("'X' Won! Click to play again.  X Wins: " + crossWins + " | O Wins: " + noughtWins);
+            } else if (currentState == State.NOUGHT_WON) {
+                statusBar.setForeground(Color.RED);
+                statusBar.setText("'O' Won! Click to play again.  X Wins: " + crossWins + " | O Wins: " + noughtWins);
             }
-        } else if (currentState == State.NOUGHT_WON) {
-            statusBar.setForeground(Color.RED);
-            statusBar.setText("'O' Won! Click to play again.  X Wins: " + crossWins + " | O Wins: " + noughtWins);
-            if (!hasShownWinnerPopup) {
-                showWinnerPopup("win_nought.gif");
-                hasShownWinnerPopup = true;
-            }
-        }
+
     }
 
     private void showWinnerPopup(String gifFileName) {
