@@ -21,6 +21,8 @@ public class GameMain extends JPanel {
     private State currentState;
     private Seed currentPlayer;
     private JLabel statusBar;
+    private int crossWins = 0;
+    private int noughtWins = 0;
 
     /** Constructor */
     public GameMain() {
@@ -36,6 +38,11 @@ public class GameMain extends JPanel {
                     if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS
                             && board.cells[row][col].content == Seed.NO_SEED) {
                         currentState = board.stepGame(currentPlayer, row, col);
+                        if (currentState == State.CROSS_WON) {
+                            crossWins++;
+                        } else if (currentState == State.NOUGHT_WON) {
+                            noughtWins++;
+                        }
                         currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
                     }
                     if (currentState == State.PLAYING) {
@@ -116,11 +123,11 @@ public class GameMain extends JPanel {
             statusBar.setText("It's a Draw! Click to play again.");
         } else if (currentState == State.CROSS_WON) {
             statusBar.setForeground(Color.RED);
-            statusBar.setText("'X' Won! Click to play again.");
+            statusBar.setText("'X' Won! Click to play again.  X Wins: " + crossWins + " | O Wins: " + noughtWins);
             showWinnerPopup("win_cross.gif");
         } else if (currentState == State.NOUGHT_WON) {
             statusBar.setForeground(Color.RED);
-            statusBar.setText("'O' Won! Click to play again.");
+            statusBar.setText("'O' Won! Click to play again.  X Wins: " + crossWins + " | O Wins: " + noughtWins);
             showWinnerPopup("win_nought.gif");
         }
 
